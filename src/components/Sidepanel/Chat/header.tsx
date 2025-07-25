@@ -7,7 +7,6 @@ import {
   BrainCog,
   CogIcon,
   EraserIcon,
-  // EraserIcon,
   HistoryIcon,
   PlusSquare,
   XIcon,
@@ -15,7 +14,7 @@ import {
 } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { CurrentChatModelSettings } from "@/components/Common/Settings/CurrentChatModelSettings"
-import React from "react"
+import React, { useCallback } from "react"
 import { useStorage } from "@plasmohq/storage/hook"
 import { PromptSelect } from "@/components/Common/PromptSelect"
 import { Sidebar } from "@/components/Option/Sidebar"
@@ -48,6 +47,14 @@ export const SidepanelHeader = () => {
     false
   )
 
+  const handleCloseSidebar = useCallback(() => {
+    setSidebarOpen(false)
+  }, [])
+
+ // Create a stable, empty function for props that need a function but do nothing.
+ // Again, this prevents a new function from being created on every render.
+  const stableEmptyFn = useCallback(() => {}, [])
+
   return (
     <div className=" px-3 justify-between bg-white dark:bg-[#171717] border-b border-gray-300 dark:border-gray-700 py-4 items-center absolute top-0 z-10 flex h-14 w-full">
       <div className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 flex items-center dark:text-white">
@@ -62,15 +69,14 @@ export const SidepanelHeader = () => {
       <div className="flex items-center space-x-3">
         {webuiBtnSidePanel ? (
           <Tooltip title={t("tooltip.openwebui")}>
-
-          <button 
-            onClick={() => {
-              const url = browser.runtime.getURL("/options.html")
-              browser.tabs.create({ url })
-            }}
-            className="flex items-center space-x-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700">
-            <MessageSquareShareIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-          </button>
+            <button
+              onClick={() => {
+                const url = browser.runtime.getURL("/options.html")
+                browser.tabs.create({ url })
+              }}
+              className="flex items-center space-x-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700">
+              <MessageSquareShareIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+            </button>
           </Tooltip>
         ) : null}
         {isEmbedding ? (
@@ -137,7 +143,6 @@ export const SidepanelHeader = () => {
             <div className="flex items-center justify-between">
               {t("tooltip.history")}
             </div>
-
             <button onClick={() => setSidebarOpen(false)}>
               <XIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
             </button>
@@ -145,11 +150,11 @@ export const SidepanelHeader = () => {
         }
         placement="left"
         closeIcon={null}
-        onClose={() => setSidebarOpen(false)}
+        onClose={handleCloseSidebar}
         open={sidebarOpen}>
         <Sidebar
           isOpen={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
+          onClose={handleCloseSidebar}
           setMessages={setMessages}
           setHistory={setHistory}
           setHistoryId={setHistoryId}
@@ -157,7 +162,7 @@ export const SidepanelHeader = () => {
           setSelectedSystemPrompt={setSelectedSystemPrompt}
           clearChat={clearChat}
           historyId={historyId}
-          setSystemPrompt={(e) => {}}
+          setSystemPrompt={stableEmptyFn}
           temporaryChat={false}
           history={history}
         />
