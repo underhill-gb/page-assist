@@ -34,7 +34,8 @@ export default function OptionLayout({
     temporaryChat,
     setSelectedSystemPrompt,
     setContextFiles,
-    history // <-- Destructure history here as it's used in the Sidebar props
+    history,
+    useOCR
   } = useMessageOption()
   const queryClient = useQueryClient()
   const { setSystemPrompt } = useStoreChatModelSettings()
@@ -122,6 +123,7 @@ export default function OptionLayout({
           open={openModelSettings}
           setOpen={setOpenModelSettings}
           useDrawer
+          isOCREnabled={useOCR} 
         />
       </main>
     </div>

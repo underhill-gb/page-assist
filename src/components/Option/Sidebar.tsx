@@ -264,7 +264,7 @@ export const Sidebar = React.memo(
       }
     }
 
-    console.log("Chat histories data:", chatHistoriesData)
+    // console.log("Chat histories data:", chatHistoriesData)
 
     return (
       <div
